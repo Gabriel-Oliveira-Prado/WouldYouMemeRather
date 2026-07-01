@@ -1,0 +1,136 @@
+/* Header Component */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-surface);
+  /* Adapts to light/dark automatically */
+  opacity: 0.95;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-surface-border);
+}
+
+/* Subtle neon glow line at the bottom */
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--color-accent-glow-strong),
+      var(--color-accent),
+      var(--color-accent-glow-strong),
+      transparent);
+  opacity: 0.6;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.header-logo-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--transition-fast);
+}
+
+.header-logo-link:hover {
+  opacity: 0.8;
+}
+
+.header-logo-icon {
+  font-size: 1.4rem;
+  filter: drop-shadow(0 0 6px var(--color-accent-glow));
+}
+
+.header-logo-text .accent {
+  color: var(--color-accent);
+  text-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.theme-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  font-size: 1.1rem;
+  transition: all var(--transition-fast);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-button:hover {
+  transform: scale(1.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.expand-button {
+  background: transparent;
+  border: 1px solid var(--color-surface-border);
+  color: var(--color-text);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.expand-button:hover {
+  background: var(--color-surface);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+  .header {
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .header-logo {
+    font-size: 0.95rem;
+  }
+
+  .expand-button {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+}
