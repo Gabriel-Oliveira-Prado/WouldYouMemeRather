@@ -1,4 +1,4 @@
-# Would You Meme Rather? 🎭 — Meme Edition
+# 🤔 Would You Meme Rather? — Meme Edition
 
 A modern and interactive web application where users make tough choices in a *"Would You Rather"* style between two classic and viral meme images fetched from Reddit and Imgflip. The interface displays real-time voting statistics (showing which option the majority chose) and tracks player streaks.
 
