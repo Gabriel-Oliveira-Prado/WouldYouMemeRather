@@ -1,79 +1,74 @@
 # Would You Meme Rather? 🎭 — Meme Edition
 
-Uma aplicação web moderna e interativa onde os usuários tomam decisões difíceis no estilo *"Would You Rather"* (Você Prefere) entre duas imagens de memes clássicos e virais do Reddit e Imgflip. A interface exibe dados de estatísticas em tempo real (qual opção a maioria escolheu) e acompanha o desempenho do usuário por meio de sequências de acertos (*streaks*).
+A modern and interactive web application where users make tough choices in a *"Would You Rather"* style between two classic and viral meme images fetched from Reddit and Imgflip. The interface displays real-time voting statistics (showing which option the majority chose) and tracks player streaks.
 
 ---
 
-## 🚀 Funcionalidades Principais
+## 🚀 Key Features
 
-- **Navegação Vertical Infinita**: Interface fluida de slides verticais alimentada por **Swiper.js**, permitindo navegar pelas comparações usando a roda do mouse, teclado ou toque na tela.
-- **Estatísticas em Tempo Real**: Após fazer uma escolha, o sistema exibe dinamicamente a porcentagem de preferência da comunidade para cada meme.
-- **Gerador de Memes Combinado (Infinite Scroll)**: Carrega imagens populares do **Imgflip API** e faz paginação contínua obtendo novos memes do **Reddit API** (buscando de subreddits como `r/memes`, `r/dankmemes` e `r/me_irl`).
-- **Sistema de Sequências (Streaks)**:
-  - **Hot Streak (Fogo) 🔥**: Aumenta sempre que o usuário escolhe a opção mais votada pela comunidade (a maioria).
-  - **Cold Streak (Gelo) ❄️**: Aumenta quando o usuário escolhe a opção menos popular (a minoria).
-  - Acompanhamento em tempo real da maior sequência obtida na sessão.
-- **Integração com Supabase (Backend)**:
-  - Registro de sessões de usuário (`game_sessions`) com tempo de atividade, contagem de votos e maiores pontuações de sequências.
-  - Incremento atômico de visualizações e votos no banco de dados através de funções remotas (RPC).
-- **Interface Premium e Temas**:
-  - Design responsivo adaptável a dispositivos móveis e desktops.
-  - Modos de visualização **Expandido (Full)** e **Compacto**.
-  - Modo Escuro (Dark Mode) por padrão com alternador para Modo Claro (Light Mode).
-  - Animações robustas e discretas controladas por **GSAP**.
-
----
-
-## 🛠️ Tecnologias e Dependências
-
-O projeto foi estruturado com as seguintes tecnologias modernas:
-
-- **Core**: [React](https://react.dev/) + [Vite](https://vite.dev/) (Rápido HMR e Build Otimizado)
-- **Estilização**: Vanilla CSS com variáveis CSS para suporte nativo a temas (Light / Dark mode).
-- **Animações**: [GSAP](https://greensock.com/gsap/) (GreenSock Animation Platform) para micro-interações refinadas.
-- **Slide / Swipe Engine**: [Swiper.js](https://swiperjs.com/) para o fluxo vertical nativo de slides.
-- **Notificações & Modais**: [SweetAlert2](https://sweetalert2.github.io/) para tratamento visual e amigável de erros de rede.
-- **Backend / Database**: [Supabase](https://supabase.com/) para dados distribuídos de estatísticas globais e sessões.
+- **Infinite Vertical Navigation**: Fluid vertical slide transitions powered by **Swiper.js**, allowing users to browse pairs using mouse scroll wheel, keyboard arrows, or touch swipes.
+- **Real-Time Statistics**: Once a choice is made, the system displays the percentage of user votes each meme has received.
+- **Combined Meme Generator (Infinite Scroll)**: Initially loads popular templates from the **Imgflip API** and infinitely fetches/paginates memes from the **Reddit API** (using subreddits like `r/memes`, `r/dankmemes`, and `r/me_irl`).
+- **Streak System**:
+  - **Hot Streak 🔥**: Increases when the player picks the choice aligned with the community majority.
+  - **Cold Streak ❄️**: Increases when the player picks the minority choice.
+  - Tracks the peak hot/cold streak achieved during the active session.
+- **Supabase Integration**:
+  - Tracks active game sessions (`game_sessions`) with duration, total votes, and peak streaks.
+  - Performs atomic increments of votes and views using database Remote Procedure Calls (RPC).
+- **Premium Design & Themes**:
+  - Responsive design optimized for both mobile and desktop screens.
+  - Features **Expanded (Full)** and **Compact** view mode toggles.
+  - Dark Mode by default, toggleable to Light Mode using CSS variables.
+  - Smooth, elegant micro-animations controlled by **GSAP**.
 
 ---
 
-## 📁 Estrutura de Arquivos
+## 🛠️ Tech Stack & Dependencies
 
-Abaixo está o layout organizacional dos arquivos principais do projeto:
+- **Core**: [React](https://react.dev/) + [Vite](https://vite.dev/)
+- **Styling**: Vanilla CSS with CSS custom properties for native light/dark theme toggles.
+- **Animations**: [GSAP](https://greensock.com/gsap/) for custom micro-animations.
+- **Slider/Swipe**: [Swiper.js](https://swiperjs.com/) for the vertical viewport-slider.
+- **Modals/Alerts**: [SweetAlert2](https://sweetalert2.github.io/) for pleasant error diagnostics.
+- **Backend/Database**: [Supabase](https://supabase.com/) for real-time global statistics and analytics.
+
+---
+
+## 📁 Project Structure
 
 ```text
 WouldYouMemeRather/
 ├── public/
 ├── src/
-│   ├── assets/             # Arquivos de mídia estática
-│   ├── components/         # Componentes React reutilizáveis
-│   │   ├── Header/          # Barra superior (logo, tema, alternar visualização)
-│   │   ├── Loader/          # Tela de carregamento animada
-│   │   ├── MemeSlide/       # Estrutura do slide contendo o duelo dos dois memes
-│   │   └── StreakCounter/   # Contador e animação da sequência atual (fogo/gelo)
+│   ├── assets/             # Static assets
+│   ├── components/         # Reusable React components
+│   │   ├── Header/          # Navbar containing logo, theme toggle, and view expander
+│   │   ├── Loader/          # Lottie/CSS animated loading screen
+│   │   ├── MemeSlide/       # Dueling card logic and statistics bar
+│   │   └── StreakCounter/   # Current active streak flame/ice animation overlay
 │   ├── hooks/
-│   │   └── useMemes.js     # Hook personalizado para carregamento, mistura e paginação
+│   │   └── useMemes.js     # Custom hook for shuffling, paging, and API composition
 │   ├── services/
-│   │   ├── imgflipApi.js   # Integração com a API da Imgflip
-│   │   ├── redditApi.js    # Integração com a API de busca de memes do Reddit
-│   │   └── supabaseClient.js # Configuração do cliente Supabase e chamadas de persistência
-│   ├── App.css             # Estilo da aplicação principal
-│   ├── App.jsx             # Fluxo lógico de estado, sessões e renderização raiz
-│   ├── index.css           # Estilos globais e sistema de tokens de design CSS (Temas)
-│   └── main.jsx            # Arquivo de entrada da aplicação
-├── .env.local              # Variáveis de ambiente locais (Ignorado no Git)
+│   │   ├── imgflipApi.js   # Imgflip template integration API
+│   │   ├── redditApi.js    # Reddit trending memes fetch API
+│   │   └── supabaseClient.js # Supabase clients, hooks, and persistence calls
+│   ├── App.css             # Main application layout styles
+│   ├── App.jsx             # State orchestration, Swiper container, and logic entry
+│   ├── index.css           # Global resets and CSS variables (theme configuration)
+│   └── main.jsx            # React root mount point
+├── .env.local              # Local environment variables (Git ignored)
 ├── package.json
 └── vite.config.js
 ```
 
 ---
 
-## ⚙️ Configuração do Banco de Dados (Supabase)
+## ⚙️ Database Schema & Bootstrap Setup
 
-Para o funcionamento correto de estatísticas e sessões globais, crie as seguintes tabelas e funções RPC no editor SQL do seu painel do Supabase:
+Create the following tables and RPC functions inside your Supabase project's SQL Editor to set up statistics tracking:
 
-### 1. Tabela `meme_stats`
-Armazena a quantidade de votos e visualizações totais de cada meme.
+### 1. Table `meme_stats`
 ```sql
 create table meme_stats (
   meme_id text primary key,
@@ -82,8 +77,7 @@ create table meme_stats (
 );
 ```
 
-### 2. Tabela `game_sessions`
-Armazena as estatísticas anônimas de engajamento de cada sessão de jogo.
+### 2. Table `game_sessions`
 ```sql
 create table game_sessions (
   id text primary key,
@@ -95,13 +89,12 @@ create table game_sessions (
 );
 ```
 
-### 3. Função RPC `increment_meme_stats`
-Utilizada para atualizar de forma segura e atômica os contadores do meme vencedor e do meme rejeitado em uma única transação no banco de dados.
+### 3. RPC Function `increment_meme_stats`
 ```sql
 create or replace function increment_meme_stats(chosen_id text, rejected_id text)
 returns void as $$
 begin
-  -- Atualizar ou inserir estatísticas para o meme escolhido
+  -- Update or insert stats for chosen option
   insert into meme_stats (meme_id, votes, views)
   values (chosen_id, 1, 1)
   on conflict (meme_id)
@@ -109,7 +102,7 @@ begin
     votes = meme_stats.votes + 1,
     views = meme_stats.views + 1;
 
-  -- Atualizar ou inserir estatísticas para o meme rejeitado
+  -- Update or insert stats for rejected option
   insert into meme_stats (meme_id, votes, views)
   values (rejected_id, 0, 1)
   on conflict (meme_id)
@@ -121,51 +114,70 @@ $$ language plpgsql security definer;
 
 ---
 
-## 🔧 Configuração e Execução
+## 🔌 Connecting to Your Database
 
-### Passos iniciais
+To connect this application to your own Supabase database, follow either of the methods below:
 
-1. **Clone o repositório:**
+### Method A: Environment File (Recommended)
+1. In the root of the project, create a `.env.local` file.
+2. Add your Supabase project keys:
+   ```env
+   VITE_SUPABASE_URL=https://your-supabase-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-supabase-public-anon-key
+   ```
+*(If these variables are omitted or contain placeholders, the app will run locally and simulate vote statistics dynamically without throwing errors).*
+
+### Method B: Supabase CLI Integration
+If you wish to log in, initialize local configurations, or link your workspace directly to your Supabase project via terminal:
+
+1. **Log in to Supabase CLI:**
    ```bash
-   git clone <URL_DO_REPOSITORIO>
+   npx supabase login
+   ```
+
+2. **Initialize Supabase in the project folder:**
+   ```bash
+   npx supabase init
+   ```
+
+3. **Link to your remote project:**
+   ```bash
+   npx supabase link --project-ref <your-supabase-project-ref-id>
+   ```
+
+4. **Pull database schemas (Optional):**
+   ```bash
+   npx supabase db pull
+   ```
+
+---
+
+## 🔧 Installation & Local Run
+
+1. **Clone the repository:**
+   ```bash
+   git clone <REPOSITORY_URL>
    cd WouldYouMemeRather
    ```
 
-2. **Instale as dependências:**
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. **Configure as Variáveis de Ambiente:**
-   Crie um arquivo `.env.local` na raiz do projeto e adicione suas credenciais do Supabase:
-   ```env
-   VITE_SUPABASE_URL=https://sua-url-do-supabase.supabase.co
-   VITE_SUPABASE_ANON_KEY=sua-chave-anonima-publica
+3. **Run the local development server:**
+   ```bash
+   npm run dev
    ```
-   *(Caso não adicione as chaves ou utilize placeholders, o aplicativo continuará rodando localmente sem persistência global, simulando as porcentagens localmente de forma segura).*
+The app will run and be available at the local address printed on your terminal (usually `http://localhost:5173/`).
 
-### Executando em ambiente local de desenvolvimento
-
-Para iniciar o servidor local com Hot Module Replacement (HMR):
-```bash
-npm run dev
-```
-O console exibirá o endereço local (geralmente `http://localhost:5173/` ou similar).
-
-### Build de Produção
-
-Para compilar e otimizar os arquivos estáticos para produção na pasta `/dist`:
-```bash
-npm run build
-```
-
-Para pré-visualizar a build localmente antes de realizar o deploy:
-```bash
-npm run preview
-```
+4. **Build for Production:**
+   ```bash
+   npm run build
+   ```
 
 ---
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está disponível sob a licença MIT. Sinta-se à vontade para clonar, sugerir alterações ou criar suas próprias edições de memes! 🚀
+Distributed under the MIT License. Feel free to clone, edit, and play! 🚀
