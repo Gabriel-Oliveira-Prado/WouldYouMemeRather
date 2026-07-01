@@ -134,3 +134,9 @@
     padding: 4px 8px;
   }
 }
+
+@media (max-width: 680px) {
+  .expand-button {
+    display: none;
+  }
+}

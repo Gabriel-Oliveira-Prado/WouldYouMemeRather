@@ -4,10 +4,10 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 // Safely initialize the Supabase client only if keys are present and not placeholders.
-const isConfigured = supabaseUrl && 
-                     supabaseUrl !== 'https://seu-projeto.supabase.co' && 
-                     supabaseAnonKey && 
-                     supabaseAnonKey !== 'sua-chave-anon-aqui';
+const isConfigured = supabaseUrl &&
+  supabaseUrl !== 'https://seu-projeto.supabase.co' &&
+  supabaseAnonKey &&
+  supabaseAnonKey !== 'sua-chave-anon-aqui';
 
 export const supabase = isConfigured ? createClient(supabaseUrl, supabaseAnonKey) : null;
 

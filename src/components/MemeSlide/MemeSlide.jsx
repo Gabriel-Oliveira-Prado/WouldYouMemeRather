@@ -3,15 +3,54 @@ import { useSwiper } from 'swiper/react';
 import { incrementMemeStats } from '../../services/supabaseClient';
 import './MemeSlide.css';
 
+// List of randomized feedback messages after voting (no sequence repetition)
+const SUCCESS_MESSAGES = [
+  "Good choice! Swipe to continue ↓",
+  "Interesting choice! See the next duel ↓",
+  "Nice pick! Scroll down for more memes ↓",
+  "A classic! Keep swiping ↓",
+  "Agreed! The next duel is waiting ↓",
+  "Bold pick! Drag up or swipe down ↓",
+  "You have taste! Swipe down to continue ↓",
+  "LMAO indeed! The next meme is ready ↓",
+  "LOL yes! Let's keep going ↓",
+  "Respectable choice! Swipe to continue ↓"
+];
+
+// Generates consistent, deterministic pseudo-stats based on the meme ID
+function getDeterministicBaseline(id) {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  hash = Math.abs(hash);
+
+  // Between 120 and 349 base views
+  const baseViews = 120 + (hash % 230);
+  
+  // Base win rate between 42% and 58%
+  const baseWinRate = 42 + (hash % 17);
+  
+  // Proportional votes
+  const baseVotes = Math.round(baseViews * (baseWinRate / 100));
+
+  return { views: baseViews, votes: baseVotes };
+}
+
 export default function MemeSlide({ optionA, optionB, slideIndex, onChoice }) {
   const [chosen, setChosen] = useState(null);
   const [percentA, setPercentA] = useState(0);
   const swiper = useSwiper();
 
-  const votesA = optionA.votes || 0;
-  const viewsA = optionA.views || 0;
-  const votesB = optionB.votes || 0;
-  const viewsB = optionB.views || 0;
+  // Get deterministic baseline for each meme
+  const baseA = getDeterministicBaseline(optionA.id);
+  const baseB = getDeterministicBaseline(optionB.id);
+
+  // Combine real Supabase stats with the baseline to smooth the percentages
+  const votesA = (optionA.votes || 0) + baseA.votes;
+  const viewsA = (optionA.views || 0) + baseA.views;
+  const votesB = (optionB.votes || 0) + baseB.votes;
+  const viewsB = (optionB.views || 0) + baseB.views;
 
   const handleChoice = useCallback(
     async (choice) => {
@@ -36,7 +75,7 @@ export default function MemeSlide({ optionA, optionB, slideIndex, onChoice }) {
         onChoice(isMajority);
       }
 
-      // Record to Supabase
+      // Record real vote to Supabase
       try {
         await incrementMemeStats(
           choice === 'A' ? optionA.id : optionB.id,
@@ -57,6 +96,9 @@ export default function MemeSlide({ optionA, optionB, slideIndex, onChoice }) {
 
   const percentB = 100 - percentA;
 
+  // Select message dynamically based on slideIndex to avoid consecutive repetition
+  const feedbackMessage = SUCCESS_MESSAGES[slideIndex % SUCCESS_MESSAGES.length];
+
   return (
     <div className="meme-slide" id={`slide-${slideIndex}`}>
       <div className="slide-counter">
@@ -64,7 +106,7 @@ export default function MemeSlide({ optionA, optionB, slideIndex, onChoice }) {
         {slideIndex + 1}
       </div>
 
-      <h2 className="slide-question">Which do you prefer?</h2>
+      <h2 className="slide-question">Which do you prefer? 🤔</h2>
 
       <div className="meme-cards">
         <button
@@ -139,13 +181,13 @@ export default function MemeSlide({ optionA, optionB, slideIndex, onChoice }) {
       {!chosen && (
         <div className="swipe-hint">
           <div className="swipe-hint-arrow">↓</div>
-          <span>Swipe to next</span>
+          <span>Swipe to next ↓</span>
         </div>
       )}
 
       {chosen && (
         <p className="chosen-message">
-          Good choice! Swipe to continue ↓
+          {feedbackMessage}
         </p>
       )}
     </div>
